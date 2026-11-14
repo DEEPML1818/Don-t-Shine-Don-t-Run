@@ -39,8 +39,7 @@ func _update_prompt() -> void:
 	else:
 		interactable_body.prompt_text = closed_prompt
 
-func _on_interacted(player: Node) -> void:
-	interact(player)
+func _on_interacted(player: Node) -> void:interact(player)
 
 ## Called when the door is interacted with.
 func interact(_player: Node) -> void:
