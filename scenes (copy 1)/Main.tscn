@@ -1,0 +1,181 @@
+[gd_scene format=3 uid="uid://main_scene_01"]
+
+[ext_resource type="PackedScene" uid="uid://player_scene_01" path="res://scenes/Player.tscn" id="1_player_scene"]
+[ext_resource type="PackedScene" uid="uid://door_scene_01" path="res://scenes/Door.tscn" id="2_door_scene"]
+[ext_resource type="PackedScene" uid="uid://note_scene_01" path="res://scenes/Note.tscn" id="3_note_scene"]
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.012, 0.014, 0.02, 1)
+ambient_light_energy = 0.2
+ssao_enabled = true
+ssao_radius = 1.8
+ssao_intensity = 2.5
+ssao_power = 1.5
+glow_enabled = true
+glow_intensity = 0.8
+glow_bloom = 0.15
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.045
+volumetric_fog_albedo = Color(0.18, 0.2, 0.22, 1)
+volumetric_fog_length = 32.0
+
+[sub_resource type="StandardMaterial3D" id="Material_Floor"]
+albedo_color = Color(0.14, 0.14, 0.15, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Material_Ceiling"]
+albedo_color = Color(0.11, 0.11, 0.12, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Material_Wall"]
+albedo_color = Color(0.2, 0.21, 0.22, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Material_Table"]
+albedo_color = Color(0.24, 0.16, 0.1, 1)
+roughness = 0.8
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="StarterRoomLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 1)
+light_color = Color(0.75, 0.8, 0.85, 1)
+light_energy = 0.25
+shadow_enabled = true
+omni_range = 5.0
+omni_attenuation = 1.5
+
+[node name="HallwayRedLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, -17)
+light_color = Color(0.9, 0.2, 0.15, 1)
+light_energy = 0.9
+shadow_enabled = true
+omni_range = 7.0
+omni_attenuation = 1.2
+
+[node name="LevelGeometry" type="Node3D" parent="."]
+
+[node name="StarterFloor" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 8)
+material = SubResource("Material_Floor")
+
+[node name="StarterCeiling" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+use_collision = true
+size = Vector3(8, 0.2, 8)
+material = SubResource("Material_Ceiling")
+
+[node name="WallBack" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 4)
+use_collision = true
+size = Vector3(8, 3, 0.2)
+material = SubResource("Material_Wall")
+
+[node name="WallLeft" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.5, 0)
+use_collision = true
+size = Vector3(0.2, 3, 8)
+material = SubResource("Material_Wall")
+
+[node name="WallRight" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.5, 0)
+use_collision = true
+size = Vector3(0.2, 3, 8)
+material = SubResource("Material_Wall")
+
+[node name="WallDividerLeft" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55, 1.5, -4)
+use_collision = true
+size = Vector3(2.9, 3, 0.2)
+material = SubResource("Material_Wall")
+
+[node name="WallDividerRight" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.55, 1.5, -4)
+use_collision = true
+size = Vector3(2.9, 3, 0.2)
+material = SubResource("Material_Wall")
+
+[node name="WallDividerTop" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55, -4)
+use_collision = true
+size = Vector3(2.2, 0.9, 0.2)
+material = SubResource("Material_Wall")
+
+[node name="HallwayFloor" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -11)
+use_collision = true
+size = Vector3(2.4, 0.2, 14)
+material = SubResource("Material_Floor")
+
+[node name="HallwayCeiling" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, -11)
+use_collision = true
+size = Vector3(2.4, 0.2, 14)
+material = SubResource("Material_Ceiling")
+
+[node name="HallwayWallLeft" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 1.5, -11)
+use_collision = true
+size = Vector3(0.2, 3, 14)
+material = SubResource("Material_Wall")
+
+[node name="HallwayWallRight" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 1.5, -11)
+use_collision = true
+size = Vector3(0.2, 3, 14)
+material = SubResource("Material_Wall")
+
+[node name="HallwayWallEnd" type="CSGBox3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -18)
+use_collision = true
+size = Vector3(2.4, 3, 0.2)
+material = SubResource("Material_Wall")
+
+[node name="Table" type="Node3D" parent="LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+
+[node name="TableTop" type="CSGBox3D" parent="LevelGeometry/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+use_collision = true
+size = Vector3(1.4, 0.08, 0.9)
+material = SubResource("Material_Table")
+
+[node name="Leg1" type="CSGBox3D" parent="LevelGeometry/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.38, -0.35)
+use_collision = true
+size = Vector3(0.08, 0.76, 0.08)
+material = SubResource("Material_Table")
+
+[node name="Leg2" type="CSGBox3D" parent="LevelGeometry/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.38, -0.35)
+use_collision = true
+size = Vector3(0.08, 0.76, 0.08)
+material = SubResource("Material_Table")
+
+[node name="Leg3" type="CSGBox3D" parent="LevelGeometry/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.38, 0.35)
+use_collision = true
+size = Vector3(0.08, 0.76, 0.08)
+material = SubResource("Material_Table")
+
+[node name="Leg4" type="CSGBox3D" parent="LevelGeometry/Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.38, 0.35)
+use_collision = true
+size = Vector3(0.08, 0.76, 0.08)
+material = SubResource("Material_Table")
+
+[node name="Note" parent="." instance=ExtResource("3_note_scene")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0.85, 0.5)
+
+[node name="Door" parent="." instance=ExtResource("2_door_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="Player" parent="." instance=ExtResource("1_player_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
