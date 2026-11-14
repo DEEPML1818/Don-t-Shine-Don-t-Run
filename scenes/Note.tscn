@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://note_scene_01"]
+
+[ext_resource type="Script" path="res://scripts/note.gd" id="1_note_script"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_Paper"]
+albedo_color = Color(0.88, 0.84, 0.74, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_Paper"]
+material = SubResource("StandardMaterial3D_Paper")
+size = Vector3(0.24, 0.005, 0.32)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_Note"]
+size = Vector3(0.3, 0.1, 0.38)
+
+[node name="Note" type="StaticBody3D"]
+script = ExtResource("1_note_script")
+prompt_text = "Read Note"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_Paper")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_Note")
