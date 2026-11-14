@@ -1,24 +1,15 @@
-[gd_scene format=3 uid="uid://player_scene_01"]
+[gd_scene load_steps=6 format=3 uid="uid://player_scene_01"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player_script"]
+[ext_resource type="PackedScene" uid="uid://hybrid_hud_scene_01" path="res://scenes/HybridHUD.tscn" id="2_hud_scene"]
+[ext_resource type="AudioStream" path="res://audio/flashlight_click.wav" id="3_flashlight_sfx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.4
 height = 2.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
-bg_color = Color(0.12, 0.11, 0.1, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.4, 0.35, 0.25, 0.8)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-
 [node name="Player" type="CharacterBody3D"]
+collision_layer = 1
 script = ExtResource("1_player_script")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -33,6 +24,8 @@ current = true
 
 [node name="InteractionRay" type="RayCast3D" parent="Head/Camera3D"]
 target_position = Vector3(0, 0, -2.5)
+collide_with_areas = true
+collide_with_bodies = true
 
 [node name="Flashlight" type="SpotLight3D" parent="Head/Camera3D"]
 light_color = Color(0.98, 0.95, 0.88, 1)
@@ -42,132 +35,8 @@ spot_range = 18.0
 spot_attenuation = 1.2
 spot_angle = 38.0
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="FlashlightAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_flashlight_sfx")
+volume_db = -8.0
 
-[node name="Crosshair" type="ColorRect" parent="HUD"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -2.5
-offset_top = -2.5
-offset_right = 2.5
-offset_bottom = 2.5
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 1, 1, 0.7)
-
-[node name="InteractionPrompt" type="Label" parent="HUD"]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = 24.0
-offset_right = 200.0
-offset_bottom = 54.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/shadow_outline_size = 2
-text = "[E] Interact"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StaminaContainer" type="Control" parent="HUD"]
-layout_mode = 3
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -120.0
-offset_top = -45.0
-offset_right = 120.0
-offset_bottom = -30.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="StaminaBar" type="ProgressBar" parent="HUD/StaminaContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-value = 100.0
-show_percentage = false
-
-[node name="NoteOverlay" type="Control" parent="HUD"]
-visible = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="DarkDim" type="ColorRect" parent="HUD/NoteOverlay"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.02, 0.02, 0.03, 0.8)
-
-[node name="PaperPanel" type="PanelContainer" parent="HUD/NoteOverlay"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -240.0
-offset_top = -220.0
-offset_right = 240.0
-offset_bottom = 220.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_1")
-
-[node name="MarginContainer" type="MarginContainer" parent="HUD/NoteOverlay/PaperPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 30
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HUD/NoteOverlay/PaperPanel/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="NoteTitle" type="Label" parent="HUD/NoteOverlay/PaperPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.9, 0.75, 1)
-theme_override_font_sizes/font_size = 20
-text = "Scattered Note"
-horizontal_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="HUD/NoteOverlay/PaperPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="NoteContent" type="Label" parent="HUD/NoteOverlay/PaperPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(0.85, 0.82, 0.75, 1)
-theme_override_font_sizes/font_size = 15
-text = "Note content appears here..."
-autowrap_mode = 2
-
-[node name="CloseHint" type="Label" parent="HUD/NoteOverlay/PaperPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.58, 0.55, 1)
-theme_override_font_sizes/font_size = 13
-text = "[E] or [Esc] to Close"
-horizontal_alignment = 1
+[node name="HybridHUD" parent="." instance=ExtResource("2_hud_scene")]

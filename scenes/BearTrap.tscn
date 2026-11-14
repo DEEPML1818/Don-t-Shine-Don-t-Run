@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=3 uid="uid://bear_trap_scene_01"]
+
+[ext_resource type="Script" path="res://scripts/bear_trap.gd" id="1_trap_script"]
+[ext_resource type="AudioStream" path="res://audio/bear_trap.wav" id="2_snap_audio"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1"]
+height = 0.4
+radius = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Material_RustyMetal"]
+albedo_color = Color(0.28, 0.22, 0.18, 1)
+metallic = 0.85
+roughness = 0.65
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_Base"]
+material = SubResource("Material_RustyMetal")
+top_radius = 0.42
+bottom_radius = 0.45
+height = 0.04
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_Plate"]
+material = SubResource("Material_RustyMetal")
+top_radius = 0.14
+bottom_radius = 0.14
+height = 0.05
+
+[sub_resource type="BoxMesh" id="BoxMesh_JawBar"]
+material = SubResource("Material_RustyMetal")
+size = Vector3(0.04, 0.06, 0.7)
+
+[node name="BearTrap" type="Area3D"]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_trap_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("CylinderShape3D_1")
+
+[node name="BaseFrame" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("CylinderMesh_Base")
+
+[node name="CenterTrigger" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
+mesh = SubResource("CylinderMesh_Plate")
+
+[node name="JawLeft" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.32, 0.04, 0)
+
+[node name="Bar" type="MeshInstance3D" parent="JawLeft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("BoxMesh_JawBar")
+
+[node name="JawRight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 0.04, 0)
+
+[node name="Bar" type="MeshInstance3D" parent="JawRight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("BoxMesh_JawBar")
+
+[node name="SnapAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_snap_audio")
+max_distance = 30.0

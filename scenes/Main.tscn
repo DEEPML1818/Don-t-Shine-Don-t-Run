@@ -1,181 +1,363 @@
-[gd_scene format=3 uid="uid://main_scene_01"]
+[gd_scene load_steps=18 format=3 uid="uid://main_scene_01"]
 
-[ext_resource type="PackedScene" uid="uid://player_scene_01" path="res://scenes/Player.tscn" id="1_player_scene"]
-[ext_resource type="PackedScene" uid="uid://door_scene_01" path="res://scenes/Door.tscn" id="2_door_scene"]
-[ext_resource type="PackedScene" uid="uid://note_scene_01" path="res://scenes/Note.tscn" id="3_note_scene"]
+[ext_resource type="Script" path="res://scripts/warehouse_nav.gd" id="1_nav_script"]
+[ext_resource type="PackedScene" uid="uid://player_scene_01" path="res://scenes/Player.tscn" id="2_player_scene"]
+[ext_resource type="PackedScene" uid="uid://door_scene_01" path="res://scenes/Door.tscn" id="3_door_scene"]
+[ext_resource type="PackedScene" uid="uid://note_scene_01" path="res://scenes/Note.tscn" id="4_note_scene"]
+[ext_resource type="PackedScene" uid="uid://bear_trap_scene_01" path="res://scenes/BearTrap.tscn" id="5_trap_scene"]
+[ext_resource type="PackedScene" uid="uid://track_shelf_scene_01" path="res://scenes/TrackShelf.tscn" id="6_shelf_scene"]
+[ext_resource type="PackedScene" uid="uid://pressure_plate_grid_scene_01" path="res://scenes/PressurePlateGrid.tscn" id="7_plate_grid_scene"]
+[ext_resource type="PackedScene" uid="uid://shadow_puzzle_scene_01" path="res://scenes/ShadowPuzzle.tscn" id="8_shadow_puzzle_scene"]
+[ext_resource type="PackedScene" uid="uid://master_key_scene_01" path="res://scenes/MasterKey.tscn" id="9_master_key_scene"]
+[ext_resource type="PackedScene" uid="uid://exit_door_scene_01" path="res://scenes/ExitDoor.tscn" id="10_exit_door_scene"]
+[ext_resource type="PackedScene" uid="uid://stalker_enemy_scene_01" path="res://scenes/StalkerEnemy.tscn" id="11_stalker_scene"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_1"]
+agent_radius = 0.5
+agent_height = 2.6
+agent_max_climb = 0.3
+agent_max_slope = 45.0
 
 [sub_resource type="Environment" id="Environment_1"]
 background_mode = 1
 ambient_light_source = 2
-ambient_light_color = Color(0.012, 0.014, 0.02, 1)
-ambient_light_energy = 0.2
+ambient_light_color = Color(0.015, 0.018, 0.022, 1)
+ambient_light_energy = 0.25
 ssao_enabled = true
-ssao_radius = 1.8
+ssao_radius = 2.0
 ssao_intensity = 2.5
 ssao_power = 1.5
 glow_enabled = true
-glow_intensity = 0.8
+glow_intensity = 0.6
 glow_bloom = 0.15
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.045
+volumetric_fog_density = 0.04
 volumetric_fog_albedo = Color(0.18, 0.2, 0.22, 1)
-volumetric_fog_length = 32.0
+volumetric_fog_length = 36.0
 
 [sub_resource type="StandardMaterial3D" id="Material_Floor"]
-albedo_color = Color(0.14, 0.14, 0.15, 1)
-roughness = 0.8
+albedo_color = Color(0.13, 0.14, 0.15, 1)
+roughness = 0.85
 
 [sub_resource type="StandardMaterial3D" id="Material_Ceiling"]
-albedo_color = Color(0.11, 0.11, 0.12, 1)
+albedo_color = Color(0.09, 0.1, 0.11, 1)
 roughness = 0.95
 
 [sub_resource type="StandardMaterial3D" id="Material_Wall"]
-albedo_color = Color(0.2, 0.21, 0.22, 1)
+albedo_color = Color(0.18, 0.2, 0.21, 1)
 roughness = 0.9
 
-[sub_resource type="StandardMaterial3D" id="Material_Table"]
-albedo_color = Color(0.24, 0.16, 0.1, 1)
-roughness = 0.8
+[sub_resource type="StandardMaterial3D" id="Material_Crate"]
+albedo_color = Color(0.42, 0.33, 0.22, 1)
+roughness = 0.85
 
 [node name="Main" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1")
 
-[node name="StarterRoomLight" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 1)
-light_color = Color(0.75, 0.8, 0.85, 1)
-light_energy = 0.25
-shadow_enabled = true
-omni_range = 5.0
-omni_attenuation = 1.5
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_1")
+script = ExtResource("1_nav_script")
 
-[node name="HallwayRedLight" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, -17)
-light_color = Color(0.9, 0.2, 0.15, 1)
-light_energy = 0.9
-shadow_enabled = true
-omni_range = 7.0
-omni_attenuation = 1.2
-
-[node name="LevelGeometry" type="Node3D" parent="."]
-
-[node name="StarterFloor" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+[node name="WarehouseFloor" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -3)
 use_collision = true
-size = Vector3(8, 0.2, 8)
+size = Vector3(50, 0.2, 52)
 material = SubResource("Material_Floor")
 
-[node name="StarterCeiling" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+[node name="WarehouseCeiling" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.1, -3)
 use_collision = true
-size = Vector3(8, 0.2, 8)
+size = Vector3(50, 0.2, 52)
 material = SubResource("Material_Ceiling")
 
-[node name="WallBack" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 4)
+[node name="OuterWallNorth" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -29)
 use_collision = true
-size = Vector3(8, 3, 0.2)
+size = Vector3(50, 5.2, 0.4)
 material = SubResource("Material_Wall")
 
-[node name="WallLeft" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.5, 0)
+[node name="OuterWallSouth" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 23)
 use_collision = true
-size = Vector3(0.2, 3, 8)
+size = Vector3(50, 5.2, 0.4)
 material = SubResource("Material_Wall")
 
-[node name="WallRight" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.5, 0)
+[node name="OuterWallWest" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 2.5, -3)
 use_collision = true
-size = Vector3(0.2, 3, 8)
+size = Vector3(0.4, 5.2, 52)
 material = SubResource("Material_Wall")
 
-[node name="WallDividerLeft" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55, 1.5, -4)
+[node name="OuterWallEast" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 2.5, -3)
 use_collision = true
-size = Vector3(2.9, 3, 0.2)
+size = Vector3(0.4, 5.2, 52)
 material = SubResource("Material_Wall")
 
-[node name="WallDividerRight" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.55, 1.5, -4)
+[node name="EntryRoomWalls" type="Node3D" parent="NavigationRegion3D"]
+
+[node name="WallLeft" type="CSGBox3D" parent="NavigationRegion3D/EntryRoomWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2.5, 16)
 use_collision = true
-size = Vector3(2.9, 3, 0.2)
+size = Vector3(0.4, 5.2, 14)
 material = SubResource("Material_Wall")
 
-[node name="WallDividerTop" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55, -4)
+[node name="WallRight" type="CSGBox3D" parent="NavigationRegion3D/EntryRoomWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2.5, 16)
 use_collision = true
-size = Vector3(2.2, 0.9, 0.2)
+size = Vector3(0.4, 5.2, 14)
 material = SubResource("Material_Wall")
 
-[node name="HallwayFloor" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -11)
+[node name="WallFrontLeft" type="CSGBox3D" parent="NavigationRegion3D/EntryRoomWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2.5, 9.5)
 use_collision = true
-size = Vector3(2.4, 0.2, 14)
-material = SubResource("Material_Floor")
-
-[node name="HallwayCeiling" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, -11)
-use_collision = true
-size = Vector3(2.4, 0.2, 14)
-material = SubResource("Material_Ceiling")
-
-[node name="HallwayWallLeft" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 1.5, -11)
-use_collision = true
-size = Vector3(0.2, 3, 14)
+size = Vector3(5, 5.2, 0.4)
 material = SubResource("Material_Wall")
 
-[node name="HallwayWallRight" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 1.5, -11)
+[node name="WallFrontRight" type="CSGBox3D" parent="NavigationRegion3D/EntryRoomWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2.5, 9.5)
 use_collision = true
-size = Vector3(0.2, 3, 14)
+size = Vector3(5, 5.2, 0.4)
 material = SubResource("Material_Wall")
 
-[node name="HallwayWallEnd" type="CSGBox3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -18)
+[node name="WallDoorLintel" type="CSGBox3D" parent="NavigationRegion3D/EntryRoomWalls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 9.5)
 use_collision = true
-size = Vector3(2.4, 3, 0.2)
+size = Vector3(2.0, 3.0, 0.4)
 material = SubResource("Material_Wall")
 
-[node name="Table" type="Node3D" parent="LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
-
-[node name="TableTop" type="CSGBox3D" parent="LevelGeometry/Table"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+[node name="PartitionWallCenterNorth" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2.5, -18)
 use_collision = true
-size = Vector3(1.4, 0.08, 0.9)
-material = SubResource("Material_Table")
+size = Vector3(12, 5.2, 0.4)
+material = SubResource("Material_Wall")
 
-[node name="Leg1" type="CSGBox3D" parent="LevelGeometry/Table"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.38, -0.35)
+[node name="PartitionWallStalkerZone" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 2.5, -18)
 use_collision = true
-size = Vector3(0.08, 0.76, 0.08)
-material = SubResource("Material_Table")
+size = Vector3(16, 5.2, 0.4)
+material = SubResource("Material_Wall")
 
-[node name="Leg2" type="CSGBox3D" parent="LevelGeometry/Table"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.38, -0.35)
+[node name="Pillars" type="Node3D" parent="NavigationRegion3D"]
+
+[node name="Pillar1" type="CSGBox3D" parent="NavigationRegion3D/Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.5, -2)
 use_collision = true
-size = Vector3(0.08, 0.76, 0.08)
-material = SubResource("Material_Table")
+size = Vector3(1.2, 5.0, 1.2)
+material = SubResource("Material_Wall")
 
-[node name="Leg3" type="CSGBox3D" parent="LevelGeometry/Table"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.38, 0.35)
+[node name="Pillar2" type="CSGBox3D" parent="NavigationRegion3D/Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2.5, -2)
 use_collision = true
-size = Vector3(0.08, 0.76, 0.08)
-material = SubResource("Material_Table")
+size = Vector3(1.2, 5.0, 1.2)
+material = SubResource("Material_Wall")
 
-[node name="Leg4" type="CSGBox3D" parent="LevelGeometry/Table"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.38, 0.35)
+[node name="Pillar3" type="CSGBox3D" parent="NavigationRegion3D/Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2.5, -12)
 use_collision = true
-size = Vector3(0.08, 0.76, 0.08)
-material = SubResource("Material_Table")
+size = Vector3(1.2, 5.0, 1.2)
+material = SubResource("Material_Wall")
 
-[node name="Note" parent="." instance=ExtResource("3_note_scene")]
-transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0.85, 0.5)
+[node name="BoxStacks" type="Node3D" parent="NavigationRegion3D"]
 
-[node name="Door" parent="." instance=ExtResource("2_door_scene")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+[node name="LowerLeftCluster1" type="CSGBox3D" parent="NavigationRegion3D/BoxStacks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 1.2, 13)
+use_collision = true
+size = Vector3(3.2, 2.4, 2.8)
+material = SubResource("Material_Crate")
 
-[node name="Player" parent="." instance=ExtResource("1_player_scene")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+[node name="LowerLeftCluster2" type="CSGBox3D" parent="NavigationRegion3D/BoxStacks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 1.5, 3)
+use_collision = true
+size = Vector3(3.4, 3.0, 2.6)
+material = SubResource("Material_Crate")
+
+[node name="LowerLeftCluster3" type="CSGBox3D" parent="NavigationRegion3D/BoxStacks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.0, 13)
+use_collision = true
+size = Vector3(2.4, 2.0, 2.4)
+material = SubResource("Material_Crate")
+
+[node name="CenterClusterWest" type="CSGBox3D" parent="NavigationRegion3D/BoxStacks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.6, -3)
+use_collision = true
+size = Vector3(2.5, 3.2, 6.0)
+material = SubResource("Material_Crate")
+
+[node name="CenterClusterEast" type="CSGBox3D" parent="NavigationRegion3D/BoxStacks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 1.6, -3)
+use_collision = true
+size = Vector3(2.5, 3.2, 6.0)
+material = SubResource("Material_Crate")
+
+[node name="CenterClusterNorth" type="CSGBox3D" parent="NavigationRegion3D/BoxStacks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -9)
+use_collision = true
+size = Vector3(6.5, 2.8, 2.0)
+material = SubResource("Material_Crate")
+
+[node name="CenterClusterSouthA" type="CSGBox3D" parent="NavigationRegion3D/BoxStacks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 1.2, 2.5)
+use_collision = true
+size = Vector3(2.5, 2.4, 2.0)
+material = SubResource("Material_Crate")
+
+[node name="CenterClusterSouthB" type="CSGBox3D" parent="NavigationRegion3D/BoxStacks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 1.2, 2.5)
+use_collision = true
+size = Vector3(2.5, 2.4, 2.0)
+material = SubResource("Material_Crate")
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="EntryLight" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 16)
+light_color = Color(0.9, 0.78, 0.6, 1)
+light_energy = 0.5
+shadow_enabled = true
+omni_range = 8.0
+
+[node name="PlateAreaLight" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 3.8, 8)
+light_color = Color(0.4, 0.7, 0.9, 1)
+light_energy = 0.35
+shadow_enabled = true
+omni_range = 10.0
+
+[node name="CenterDimLight" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -3)
+light_color = Color(0.95, 0.8, 0.4, 1)
+light_energy = 0.3
+shadow_enabled = true
+omni_range = 8.0
+
+[node name="StalkerZoneRedBeacon" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 3.5, -10)
+light_color = Color(0.95, 0.18, 0.12, 1)
+light_energy = 0.8
+shadow_enabled = true
+omni_range = 12.0
+
+[node name="ExitCorridorLight" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 3.5, -20)
+light_color = Color(0.25, 0.8, 0.45, 1)
+light_energy = 0.4
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="EntryDoor" parent="." instance=ExtResource("3_door_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.5)
+
+[node name="EntryTable" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13.5)
+
+[node name="TableTop" type="CSGBox3D" parent="EntryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+use_collision = true
+size = Vector3(1.6, 0.08, 1.0)
+material = SubResource("Material_Crate")
+
+[node name="Leg1" type="CSGBox3D" parent="EntryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.35, -0.4)
+use_collision = true
+size = Vector3(0.08, 0.7, 0.08)
+material = SubResource("Material_Crate")
+
+[node name="Leg2" type="CSGBox3D" parent="EntryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.35, -0.4)
+use_collision = true
+size = Vector3(0.08, 0.7, 0.08)
+material = SubResource("Material_Crate")
+
+[node name="Leg3" type="CSGBox3D" parent="EntryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.35, 0.4)
+use_collision = true
+size = Vector3(0.08, 0.7, 0.08)
+material = SubResource("Material_Crate")
+
+[node name="Leg4" type="CSGBox3D" parent="EntryTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.35, 0.4)
+use_collision = true
+size = Vector3(0.08, 0.7, 0.08)
+material = SubResource("Material_Crate")
+
+[node name="IntroNote" parent="." instance=ExtResource("4_note_scene")]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0, 0.8, 13.5)
+note_title = "Warehouse Incident Log - Shift #4"
+note_content = "FACILITY LOCKDOWN ORDER:
+
+A hostile Stalker entity has breached the East Storage Bays.
+1. DO NOT SHINE your flashlight in its direction—it tracks direct light!
+2. DO NOT RUN unless pursued—sprinting footsteps alert the creature across aisles.
+3. The Master Key is locked in the central crate maze. Beware of bear traps hidden in the aisles.
+4. Step on the 4 floor pressure plates in the West Wing in correct sequence to open the lower rail shelves.
+5. Align the rotating spotlight pedestal in the East Wing (North 180°) to open the upper track shelf leading to the Emergency Exit."
+
+[node name="LowerTrackShelfA" parent="." instance=ExtResource("6_shelf_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8, 0, 5)
+slide_offset = Vector3(0, 0, 4.2)
+slide_duration = 1.6
+
+[node name="LowerTrackShelfB" parent="." instance=ExtResource("6_shelf_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8, 0, -1)
+slide_offset = Vector3(0, 0, -4.2)
+slide_duration = 1.6
+
+[node name="PressurePlateGrid" parent="." node_paths=PackedStringArray("target_shelves") instance=ExtResource("7_plate_grid_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 8)
+target_shelves = [NodePath("../LowerTrackShelfA"), NodePath("../LowerTrackShelfB")]
+sequence = Array[int]([0, 2, 1, 3])
+
+[node name="MasterKey" parent="." instance=ExtResource("9_master_key_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="TrapCenterWest" parent="." instance=ExtResource("5_trap_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 0.5)
+
+[node name="TrapCenterEast" parent="." instance=ExtResource("5_trap_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 0.5)
+
+[node name="TrapCenterNorth" parent="." instance=ExtResource("5_trap_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.5)
+
+[node name="UpperTrackShelf" parent="." instance=ExtResource("6_shelf_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, -18)
+slide_offset = Vector3(-4.2, 0, 0)
+slide_duration = 1.8
+
+[node name="ShadowPuzzle" parent="." node_paths=PackedStringArray("target_shelf") instance=ExtResource("8_shadow_puzzle_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, -4)
+target_shelf = NodePath("../UpperTrackShelf")
+target_angle = 180.0
+
+[node name="StalkerPatrolPoints" type="Node3D" parent="."]
+
+[node name="Point1" type="Node3D" parent="StalkerPatrolPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 2)
+
+[node name="Point2" type="Node3D" parent="StalkerPatrolPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -12)
+
+[node name="Point3" type="Node3D" parent="StalkerPatrolPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -22)
+
+[node name="Point4" type="Node3D" parent="StalkerPatrolPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -4)
+
+[node name="StalkerEnemy" parent="." node_paths=PackedStringArray("patrol_points") instance=ExtResource("11_stalker_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 2)
+patrol_points = [NodePath("../StalkerPatrolPoints/Point1"), NodePath("../StalkerPatrolPoints/Point2"), NodePath("../StalkerPatrolPoints/Point3"), NodePath("../StalkerPatrolPoints/Point4")]
+patrol_speed = 2.4
+investigate_speed = 3.6
+chase_speed = 5.2
+
+[node name="ExitDoor" parent="." instance=ExtResource("10_exit_door_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -28.2)
+
+[node name="ExitTrap" parent="." instance=ExtResource("5_trap_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, -24.0)
+
+[node name="Player" parent="." instance=ExtResource("2_player_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.5)

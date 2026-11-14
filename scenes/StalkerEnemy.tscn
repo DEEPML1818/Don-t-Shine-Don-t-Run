@@ -1,0 +1,92 @@
+[gd_scene load_steps=10 format=3 uid="uid://stalker_enemy_scene_01"]
+
+[ext_resource type="Script" path="res://scripts/stalker_enemy.gd" id="1_stalker_script"]
+[ext_resource type="AudioStream" path="res://audio/stalker_alert.wav" id="2_alert_audio"]
+[ext_resource type="AudioStream" path="res://audio/stalker_roar.wav" id="3_roar_audio"]
+[ext_resource type="AudioStream" path="res://audio/jumpscare.wav" id="4_jumpscare_audio"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_Stalker"]
+radius = 0.45
+height = 2.6
+
+[sub_resource type="StandardMaterial3D" id="Material_ShadowBody"]
+albedo_color = Color(0.08, 0.08, 0.09, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Material_GlowingEyes"]
+albedo_color = Color(1, 0.1, 0.05, 1)
+emission_enabled = true
+emission = Color(1, 0.15, 0.05, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_Body"]
+material = SubResource("Material_ShadowBody")
+radius = 0.38
+height = 2.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_Head"]
+material = SubResource("Material_ShadowBody")
+radius = 0.28
+height = 0.52
+
+[sub_resource type="SphereMesh" id="SphereMesh_Eye"]
+material = SubResource("Material_GlowingEyes")
+radius = 0.045
+height = 0.09
+
+[node name="StalkerEnemy" type="CharacterBody3D"]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_stalker_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+shape = SubResource("CapsuleShape3D_Stalker")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 1.0
+target_desired_distance = 1.0
+
+[node name="VisionRay" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+target_position = Vector3(0, 0, -25)
+collide_with_areas = false
+collide_with_bodies = true
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="BodyMesh" type="MeshInstance3D" parent="VisualRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+mesh = SubResource("CapsuleMesh_Body")
+
+[node name="Head" type="Node3D" parent="VisualRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 0)
+
+[node name="HeadMesh" type="MeshInstance3D" parent="VisualRoot/Head"]
+mesh = SubResource("SphereMesh_Head")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="VisualRoot/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.05, -0.22)
+mesh = SubResource("SphereMesh_Eye")
+
+[node name="EyeRight" type="MeshInstance3D" parent="VisualRoot/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.05, -0.22)
+mesh = SubResource("SphereMesh_Eye")
+
+[node name="StalkerLight" type="OmniLight3D" parent="VisualRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -0.3)
+light_color = Color(0.95, 0.2, 0.15, 1)
+light_energy = 1.2
+omni_range = 4.5
+
+[node name="AlertAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_alert_audio")
+max_distance = 35.0
+
+[node name="RoarAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_roar_audio")
+max_distance = 45.0
+
+[node name="JumpscareAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_jumpscare_audio")
+max_distance = 50.0

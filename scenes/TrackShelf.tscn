@@ -1,0 +1,95 @@
+[gd_scene load_steps=10 format=3 uid="uid://track_shelf_scene_01"]
+
+[ext_resource type="Script" path="res://scripts/track_shelf.gd" id="1_shelf_script"]
+[ext_resource type="AudioStream" path="res://audio/shelf_slide.wav" id="2_slide_audio"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_Shelf"]
+size = Vector3(1.2, 4.0, 3.6)
+
+[sub_resource type="StandardMaterial3D" id="Material_SteelFrame"]
+albedo_color = Color(0.22, 0.25, 0.28, 1)
+metallic = 0.8
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Material_ShelfTier"]
+albedo_color = Color(0.3, 0.32, 0.35, 1)
+metallic = 0.6
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Material_Cardboard"]
+albedo_color = Color(0.48, 0.38, 0.24, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Material_Rail"]
+albedo_color = Color(0.18, 0.18, 0.2, 1)
+metallic = 0.9
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_Post"]
+material = SubResource("Material_SteelFrame")
+size = Vector3(0.1, 4.0, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_Tier"]
+material = SubResource("Material_ShelfTier")
+size = Vector3(1.18, 0.08, 3.55)
+
+[sub_resource type="BoxMesh" id="BoxMesh_Box1"]
+material = SubResource("Material_Cardboard")
+size = Vector3(0.8, 0.7, 0.9)
+
+[sub_resource type="BoxMesh" id="BoxMesh_Box2"]
+material = SubResource("Material_Cardboard")
+size = Vector3(0.9, 0.8, 1.2)
+
+[node name="TrackShelf" type="AnimatableBody3D"]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_shelf_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_Shelf")
+
+[node name="Post1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 2, -1.75)
+mesh = SubResource("BoxMesh_Post")
+
+[node name="Post2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2, -1.75)
+mesh = SubResource("BoxMesh_Post")
+
+[node name="Post3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 2, 1.75)
+mesh = SubResource("BoxMesh_Post")
+
+[node name="Post4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2, 1.75)
+mesh = SubResource("BoxMesh_Post")
+
+[node name="Tier1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("BoxMesh_Tier")
+
+[node name="Tier2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+mesh = SubResource("BoxMesh_Tier")
+
+[node name="Tier3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, 0)
+mesh = SubResource("BoxMesh_Tier")
+
+[node name="BoxA" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79, -0.8)
+mesh = SubResource("BoxMesh_Box1")
+
+[node name="BoxB" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, 0.7)
+mesh = SubResource("BoxMesh_Box2")
+
+[node name="BoxC" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.99, -0.3)
+mesh = SubResource("BoxMesh_Box1")
+
+[node name="SlideAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_slide_audio")
+max_distance = 35.0

@@ -44,8 +44,7 @@ func _on_interacted(player: Node) -> void:
 
 ## Called when the door is interacted with.
 func interact(_player: Node) -> void:
-	if is_busy:
-		return
+	if is_busy:		return
 	
 	if is_locked:
 		_play_locked_shake()
