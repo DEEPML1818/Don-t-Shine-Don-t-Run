@@ -1,0 +1,108 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/messy_human_animator.gd" id="1_kroay"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/pelvis.res" id="2_4urfk"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/spine.res" id="3_01sw3"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/ribcage.res" id="4_4bq44"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/shroud.res" id="5_5hgov"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/skull.res" id="6_ooak4"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/hair.res" id="7_gvvub"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/teeth_upper.res" id="8_omdp7"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/eye_right.res" id="9_vrukj"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/eye_left.res" id="10_ttiha"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/jaw.res" id="11_jvfe5"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/teeth_lower.res" id="12_04stb"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/arm_left.res" id="13_1ikp1"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/hand_left.res" id="14_jo81q"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/arm_right.res" id="15_08w50"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/hand_right.res" id="16_eup6b"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/leg_left.res" id="17_mr0rq"]
+[ext_resource type="ArrayMesh" path="res://models/scary_monster/leg_right.res" id="18_jrqb4"]
+
+[node name="MessyHumanoid" type="Node3D" unique_id=1042704749]
+script = ExtResource("1_kroay")
+
+[node name="Hips" type="Node3D" parent="." unique_id=884020733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="PelvisMesh" type="MeshInstance3D" parent="Hips" unique_id=1514891625]
+mesh = ExtResource("2_4urfk")
+
+[node name="Torso" type="Node3D" parent="Hips" unique_id=930874889]
+
+[node name="SpineMesh" type="MeshInstance3D" parent="Hips/Torso" unique_id=139402172]
+mesh = ExtResource("3_01sw3")
+
+[node name="RibcageMesh" type="MeshInstance3D" parent="Hips/Torso" unique_id=958273202]
+mesh = ExtResource("4_4bq44")
+
+[node name="ShroudMesh" type="MeshInstance3D" parent="Hips/Torso" unique_id=1783907079]
+mesh = ExtResource("5_5hgov")
+
+[node name="Neck" type="Node3D" parent="Hips/Torso" unique_id=1031940979]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -0.26)
+
+[node name="Head" type="Node3D" parent="Hips/Torso/Neck" unique_id=417293363]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, -0.05)
+
+[node name="SkullMesh" type="MeshInstance3D" parent="Hips/Torso/Neck/Head" unique_id=1944199846]
+mesh = ExtResource("6_ooak4")
+
+[node name="HairMesh" type="MeshInstance3D" parent="Hips/Torso/Neck/Head" unique_id=409607594]
+mesh = ExtResource("7_gvvub")
+
+[node name="TeethUpper" type="MeshInstance3D" parent="Hips/Torso/Neck/Head" unique_id=1644320629]
+mesh = ExtResource("8_omdp7")
+
+[node name="EyeRight" type="MeshInstance3D" parent="Hips/Torso/Neck/Head" unique_id=538653107]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.04, -0.19)
+mesh = ExtResource("9_vrukj")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="Hips/Torso/Neck/Head" unique_id=1921216542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.03, -0.18)
+mesh = ExtResource("10_ttiha")
+
+[node name="JawHinge" type="Node3D" parent="Hips/Torso/Neck/Head" unique_id=999738929]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0.02)
+
+[node name="JawMesh" type="MeshInstance3D" parent="Hips/Torso/Neck/Head/JawHinge" unique_id=810685235]
+mesh = ExtResource("11_jvfe5")
+
+[node name="TeethLower" type="MeshInstance3D" parent="Hips/Torso/Neck/Head/JawHinge" unique_id=1863676445]
+mesh = ExtResource("12_04stb")
+
+[node name="ShoulderLeft" type="Node3D" parent="Hips/Torso" unique_id=376567648]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28, 0.74, -0.12)
+
+[node name="ArmLeftMesh" type="MeshInstance3D" parent="Hips/Torso/ShoulderLeft" unique_id=1556070338]
+mesh = ExtResource("13_1ikp1")
+
+[node name="HandLeft" type="Node3D" parent="Hips/Torso/ShoulderLeft" unique_id=434242098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.08, -0.1)
+
+[node name="HandLeftMesh" type="MeshInstance3D" parent="Hips/Torso/ShoulderLeft/HandLeft" unique_id=1524310098]
+mesh = ExtResource("14_jo81q")
+
+[node name="ShoulderRight" type="Node3D" parent="Hips/Torso" unique_id=377377540]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, 0.7, -0.12)
+
+[node name="ArmRightMesh" type="MeshInstance3D" parent="Hips/Torso/ShoulderRight" unique_id=26325911]
+mesh = ExtResource("15_08w50")
+
+[node name="HandRight" type="Node3D" parent="Hips/Torso/ShoulderRight" unique_id=2140767455]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.08, -0.1)
+
+[node name="HandRightMesh" type="MeshInstance3D" parent="Hips/Torso/ShoulderRight/HandRight" unique_id=360589246]
+mesh = ExtResource("16_eup6b")
+
+[node name="HipLeft" type="Node3D" parent="Hips" unique_id=1795589803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, -0.06, 0)
+
+[node name="LegLeftMesh" type="MeshInstance3D" parent="Hips/HipLeft" unique_id=1432383553]
+mesh = ExtResource("17_mr0rq")
+
+[node name="HipRight" type="Node3D" parent="Hips" unique_id=822953888]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, -0.06, 0)
+
+[node name="LegRightMesh" type="MeshInstance3D" parent="Hips/HipRight" unique_id=651275912]
+mesh = ExtResource("18_jrqb4")
