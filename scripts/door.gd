@@ -1,7 +1,7 @@
 class_name Door
 extends Node3D
 
-## A modular, interactive 3D door that pivots on a hinge using Tweens.
+## A modular, interactive 3D door that pivots on a hinge using Tweens. 
 ## Features open/close states, locked state with jiggle animation, and dynamic prompts.
 
 @export var is_locked: bool = false:
@@ -12,7 +12,7 @@ extends Node3D
 @export var open_angle_degrees: float = 90.0
 @export var open_speed: float = 0.6
 @export var locked_prompt: String = "Door (Locked)"
-@export var open_prompt: String = "Close Door"
+@export var open_prompt: String= "Close Door"
 @export var closed_prompt: String = "Open Door"
 
 @onready var hinge: Node3D = $Hinge
@@ -39,11 +39,13 @@ func _update_prompt() -> void:
 	else:
 		interactable_body.prompt_text = closed_prompt
 
-func _on_interacted(player: Node) -> void:interact(player)
+func _on_interacted(player: Node) -> void:
+	interact(player)
 
 ## Called when the door is interacted with.
 func interact(_player: Node) -> void:
-	if is_busy:		return
+	if is_busy:
+		return
 	
 	if is_locked:
 		_play_locked_shake()
